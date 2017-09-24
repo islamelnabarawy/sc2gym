@@ -15,3 +15,6 @@ observation, and the step function returns a tuple
 the observation is the full observation object from the pysc2 environment.
 The reward is the same as observation.reward, and done is equal true if
 observation.step_type is LAST.
+* In addition to step() and reset(), the environment defines a save_replay()
+method, that takes a single parameter, replay_dir, which is the name of the
+replay directory to save to inside the `StarCraft II/Replays/` folder.
