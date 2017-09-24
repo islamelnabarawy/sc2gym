@@ -18,3 +18,7 @@ observation.step_type is LAST.
 * In addition to step() and reset(), the environment defines a save_replay()
 method, that takes a single parameter, replay_dir, which is the name of the
 replay directory to save to inside the `StarCraft II/Replays/` folder.
+* The examples folder contains an example of using this environment.
+There are two functions defined in there, random_action() and move_to_beacon().
+The random_action() function was tested with each of the environment. The
+move_to_beacon() function has the scripted agent example from pysc2.
