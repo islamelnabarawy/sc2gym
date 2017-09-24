@@ -35,7 +35,8 @@ def main():
     while not done:
         action = move_to_beacon(obs)
         obs, reward, done, _ = env.step(action)
-        time.sleep(0.5)
+
+    env.save_replay(env.map_name)
 
 
 def move_to_beacon(obs):
