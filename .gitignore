@@ -1,1 +1,4 @@
 .idea/
+*.log
+*.json
+*.egg-info/

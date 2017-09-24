@@ -1,12 +1,12 @@
 import sys
 
+import numpy
 import gym
 import gflags as flags
 
 # noinspection PyUnresolvedReferences
 import sc2gym.envs
 
-import time
 from pysc2.lib import actions, features
 
 __author__ = 'Islam Elnabarawy'
@@ -33,13 +33,20 @@ def main():
 
     done = False
     while not done:
-        action = move_to_beacon(obs)
+        action = move_to_beacon(env, obs)
         obs, reward, done, _ = env.step(action)
 
     env.save_replay(env.map_name)
 
 
-def move_to_beacon(obs):
+def random_action(env, obs):
+    function_id = numpy.random.choice(obs.observation["available_actions"])
+    args = [[numpy.random.randint(0, size) for size in arg.sizes]
+            for arg in env.action_spec.functions[function_id].args]
+    return [function_id] + args
+
+
+def move_to_beacon(env, obs):
     if _MOVE_SCREEN in obs.observation["available_actions"]:
         player_relative = obs.observation["screen"][_PLAYER_RELATIVE]
         neutral_y, neutral_x = (player_relative == _PLAYER_NEUTRAL).nonzero()
