@@ -45,10 +45,10 @@ class SC2MiniGameEnv(gym.Env):
             obs = self._env.step([actions.FunctionCall(action[0], action[1:])])[0]
         except KeyboardInterrupt:
             logger.info("Interrupted. Quitting...")
-            return None, None, True, {}
+            return None, 0, True, {}
         except Exception:
             logger.exception("An unexpected error occurred while applying action to environment.")
-            return None, None, True, {}
+            return None, 0, True, {}
         self.available_actions = obs.observation['available_actions']
         reward = obs.reward
         return obs, reward, obs.step_type == StepType.LAST, {}
