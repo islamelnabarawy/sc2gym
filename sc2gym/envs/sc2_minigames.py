@@ -22,13 +22,8 @@ class SC2MiniGameEnv(gym.Env):
     def __init__(self, map_name, visualize=True) -> None:
         super().__init__()
         self.map_name = map_name
-        self._env = sc2_env.SC2Env(
-            map_name,
-            step_mul=self.step_mul,
-            visualize=visualize
-        )
-        self.action_spec = self._env.action_spec()
-        self.observation_spec = self._env.observation_spec()
+        self._visualize = visualize
+        self._env = None
 
         # self.action_space = spaces.Discrete(len(self.action_spec.functions))
         # self.observation_space = spaces.Box(low=0, high=100, shape=self.observation_spec['screen'])
@@ -54,6 +49,8 @@ class SC2MiniGameEnv(gym.Env):
         return obs, reward, obs.step_type == StepType.LAST, {}
 
     def _reset(self):
+        if self._env is None:
+            self._init_env()
         self.episode += 1
         self.num_step = 0
         logger.info("Episode %d starting...", self.episode)
@@ -63,3 +60,30 @@ class SC2MiniGameEnv(gym.Env):
 
     def save_replay(self, replay_dir):
         self._env.save_replay(replay_dir)
+
+    def _init_env(self):
+        self._env = sc2_env.SC2Env(
+            self.map_name,
+            step_mul=self.step_mul,
+            visualize=self._visualize
+        )
+
+    @property
+    def visualize(self):
+        return self._visualize
+
+    @visualize.setter
+    def visualize(self, value):
+        self._visualize = value
+
+    @property
+    def action_spec(self):
+        if self._env is None:
+            self._init_env()
+        return self._env.action_spec()
+
+    @property
+    def observation_spec(self):
+        if self._env is None:
+            self._init_env()
+        return self._env.observation_spec()
