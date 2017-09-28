@@ -68,6 +68,10 @@ class SC2MiniGameEnv(gym.Env):
             visualize=self._visualize
         )
 
+    def close(self):
+        self._env.close()
+        super().close()
+
     @property
     def visualize(self):
         return self._visualize
