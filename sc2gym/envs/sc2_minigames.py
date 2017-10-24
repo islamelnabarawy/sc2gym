@@ -63,7 +63,7 @@ class SC2MiniGameEnv(gym.Env):
 
     def _init_env(self):
         self._env = sc2_env.SC2Env(
-            self.map_name,
+            map_name=self.map_name,
             step_mul=self.step_mul,
             visualize=self._visualize
         )
