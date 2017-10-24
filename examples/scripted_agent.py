@@ -2,7 +2,7 @@ import sys
 
 import numpy
 import gym
-import gflags as flags
+from absl import flags
 
 # noinspection PyUnresolvedReferences
 import sc2gym.envs
