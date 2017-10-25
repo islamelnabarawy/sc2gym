@@ -14,12 +14,14 @@ FLAGS = flags.FLAGS
 _PLAYER_NEUTRAL = 3  # beacon/minerals
 _NO_OP = 0
 
+_NUM_EPISODES = 10
+
 
 def main():
     FLAGS(sys.argv)
 
     env = gym.make("SC2MoveToBeacon-v0")
-    for _ in range(100):
+    for _ in range(_NUM_EPISODES):
         obs = env.reset()
 
         total_reward = 0
