@@ -1,6 +1,6 @@
 import sys
 
-import numpy
+import numpy as np
 import gym
 from absl import flags
 
@@ -28,34 +28,25 @@ _SELECT_ALL = [0]
 def main():
     FLAGS(sys.argv)
 
-    env = gym.make("SC2MoveToBeacon-v0")
+    env = gym.make("SC2CollectMineralShards-v0")
     obs = env.reset()
 
+    total_reward = 0
     done = False
     while not done:
-        action = move_to_beacon(env, obs)
+        action = random_action(env, obs)
         obs, reward, done, _ = env.step(action)
+        total_reward += reward
 
-    env.save_replay(env.map_name)
+    print('Episode {} reward: {}'.format(env.episode, total_reward))
+    # env.save_replay(env.map_name)
 
 
 def random_action(env, obs):
-    function_id = numpy.random.choice(obs.observation["available_actions"])
-    args = [[numpy.random.randint(0, size) for size in arg.sizes]
+    function_id = np.random.choice(obs.observation["available_actions"])
+    args = [[np.random.randint(0, size) for size in arg.sizes]
             for arg in env.action_spec.functions[function_id].args]
     return [function_id] + args
-
-
-def move_to_beacon(env, obs):
-    if _MOVE_SCREEN in obs.observation["available_actions"]:
-        player_relative = obs.observation["screen"][_PLAYER_RELATIVE]
-        neutral_y, neutral_x = (player_relative == _PLAYER_NEUTRAL).nonzero()
-        if not neutral_y.any():
-            return actions.FunctionCall(_NO_OP, [])
-        target = [int(neutral_x.mean()), int(neutral_y.mean())]
-        return [_MOVE_SCREEN, _NOT_QUEUED, target]
-    else:
-        return [_SELECT_ARMY, _SELECT_ALL]
 
 
 if __name__ == "__main__":
