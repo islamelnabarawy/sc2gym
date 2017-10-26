@@ -58,7 +58,9 @@ class MoveToBeaconEnv(SC2MiniGameEnv):
 
     @staticmethod
     def _extract_observation(obs):
-        return obs.observation["screen"][_PLAYER_RELATIVE]
+        obs = obs.observation["screen"][_PLAYER_RELATIVE]
+        obs = obs.reshape(obs.shape + (1, ))
+        return obs
 
     def _translate_action(self, action):
         if action == 0:
