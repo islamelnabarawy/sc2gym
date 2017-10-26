@@ -45,7 +45,7 @@ class MoveToBeaconEnv(SC2MiniGameEnv):
     @property
     def observation_space(self):
         if self._observation_space is None:
-            screen_shape = self.observation_spec["screen"][1:]
+            screen_shape = self.observation_spec["screen"][1:] + (1, )
             self._observation_space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape)
         return self._observation_space
 
