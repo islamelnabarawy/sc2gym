@@ -23,18 +23,19 @@ def main():
     env = gym.make("SC2MoveToBeacon-v0")
     env.settings['visualize'] = False
 
-    for _ in range(_NUM_EPISODES):
+    episode_reward = np.zeros((_NUM_EPISODES, ))
+    for ix in range(_NUM_EPISODES):
         obs = env.reset()
 
-        total_reward = 0
         done = False
         while not done:
             action = move_to_beacon(obs)
             obs, reward, done, _ = env.step(action)
-            total_reward += reward
+            episode_reward[ix] += reward
 
-        print('Episode {} reward: {}'.format(env.episode, total_reward))
-    # env.save_replay(env.map_name + '/scripted_example')
+        print('Episode {} reward: {}'.format(env.episode, episode_reward[ix]))
+
+    print('Average reward for {} episodes: {}'.format(_NUM_EPISODES, np.mean(episode_reward)))
 
 
 def move_to_beacon(obs):
