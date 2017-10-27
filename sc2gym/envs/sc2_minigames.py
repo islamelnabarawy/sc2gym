@@ -1,7 +1,6 @@
 import logging
 
 import gym
-# from gym import spaces
 from pysc2.env import sc2_env
 from pysc2.env.environment import StepType
 from pysc2.lib import actions
@@ -17,16 +16,12 @@ _NO_OP = actions.FUNCTIONS.no_op.id
 class SC2MiniGameEnv(gym.Env):
     metadata = {'render.modes': [None, 'human']}
 
-    step_mul = 8
-
-    def __init__(self, map_name, visualize=True) -> None:
+    def __init__(self, map_name=None, step_mul=8, visualize=True) -> None:
         super().__init__()
-        self.map_name = map_name
+        self._map_name = map_name
         self._visualize = visualize
+        self._step_mul = step_mul
         self._env = None
-
-        # self.action_space = spaces.Discrete(len(self.action_spec.functions))
-        # self.observation_space = spaces.Box(low=0, high=100, shape=self.observation_spec['screen'])
 
         self.episode = 0
         self.num_step = 0
@@ -63,8 +58,8 @@ class SC2MiniGameEnv(gym.Env):
 
     def _init_env(self):
         self._env = sc2_env.SC2Env(
-            map_name=self.map_name,
-            step_mul=self.step_mul,
+            map_name=self._map_name,
+            step_mul=self._step_mul,
             visualize=self._visualize
         )
 
@@ -78,7 +73,21 @@ class SC2MiniGameEnv(gym.Env):
 
     @visualize.setter
     def visualize(self, value):
-        self._visualize = value
+        if self._env is not None:
+            logger.warning("Setting visualize attribute after the game started has no effect.")
+        else:
+            self._visualize = value
+
+    @property
+    def map_name(self):
+        return self._map_name
+
+    @map_name.setter
+    def map_name(self, value):
+        if self._env is not None:
+            logger.warning("Setting map_name attribute after the game started has no effect.")
+        else:
+            self._map_name = value
 
     @property
     def action_spec(self):
