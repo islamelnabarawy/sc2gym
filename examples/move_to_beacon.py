@@ -21,6 +21,8 @@ def main():
     FLAGS(sys.argv)
 
     env = gym.make("SC2MoveToBeacon-v0")
+    env.settings['visualize'] = False
+
     for _ in range(_NUM_EPISODES):
         obs = env.reset()
 
