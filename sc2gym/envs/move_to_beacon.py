@@ -4,7 +4,7 @@ from pysc2.lib import actions, features
 
 # noinspection PyUnresolvedReferences
 import sc2gym.envs
-from sc2gym.envs import SC2MiniGameEnv
+from sc2gym.envs import SC2GameEnv
 
 __author__ = 'Islam Elnabarawy'
 
@@ -22,7 +22,7 @@ _MOVE_SCREEN = actions.FUNCTIONS.Move_screen.id
 _NOT_QUEUED = [0]
 
 
-class MoveToBeaconEnv(SC2MiniGameEnv):
+class MoveToBeaconEnv(SC2GameEnv):
     def __init__(self, visualize=False):
         super().__init__(map_name=_MAP_NAME, visualize=visualize)
         self._action_space = None

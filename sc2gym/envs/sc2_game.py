@@ -13,7 +13,7 @@ logger.setLevel(logging.INFO)
 _NO_OP = actions.FUNCTIONS.no_op.id
 
 
-class SC2MiniGameEnv(gym.Env):
+class SC2GameEnv(gym.Env):
     metadata = {'render.modes': [None, 'human']}
 
     def __init__(self, map_name=None, step_mul=8, visualize=True) -> None:

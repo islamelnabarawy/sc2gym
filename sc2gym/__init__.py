@@ -10,7 +10,7 @@ register(
 
 register(
     id='SC2CollectMineralShards-v0',
-    entry_point='sc2gym.envs:SC2MiniGameEnv',
+    entry_point='sc2gym.envs:SC2GameEnv',
     kwargs={
         'map_name': 'CollectMineralShards'
     }
@@ -18,7 +18,7 @@ register(
 
 register(
     id='SC2FindAndDefeatZerglings-v0',
-    entry_point='sc2gym.envs:SC2MiniGameEnv',
+    entry_point='sc2gym.envs:SC2GameEnv',
     kwargs={
         'map_name': 'FindAndDefeatZerglings'
     }
@@ -26,7 +26,7 @@ register(
 
 register(
     id='SC2DefeatRoaches-v0',
-    entry_point='sc2gym.envs:SC2MiniGameEnv',
+    entry_point='sc2gym.envs:SC2GameEnv',
     kwargs={
         'map_name': 'DefeatRoaches'
     }
@@ -34,7 +34,7 @@ register(
 
 register(
     id='SC2DefeatZerglingsAndBanelings-v0',
-    entry_point='sc2gym.envs:SC2MiniGameEnv',
+    entry_point='sc2gym.envs:SC2GameEnv',
     kwargs={
         'map_name': 'DefeatZerglingsAndBanelings'
     }
@@ -42,7 +42,7 @@ register(
 
 register(
     id='SC2CollectMineralsAndGas-v0',
-    entry_point='sc2gym.envs:SC2MiniGameEnv',
+    entry_point='sc2gym.envs:SC2GameEnv',
     kwargs={
         'map_name': 'CollectMineralsAndGas'
     }
@@ -50,7 +50,7 @@ register(
 
 register(
     id='SC2BuildMarines-v0',
-    entry_point='sc2gym.envs:SC2MiniGameEnv',
+    entry_point='sc2gym.envs:SC2GameEnv',
     kwargs={
         'map_name': 'BuildMarines'
     }
