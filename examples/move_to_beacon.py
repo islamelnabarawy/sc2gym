@@ -42,9 +42,8 @@ def move_to_beacon(obs):
     neutral_y, neutral_x, _ = (obs == _PLAYER_NEUTRAL).nonzero()
     if not neutral_y.any():
         return _NO_OP
-    x_coord = int(neutral_x.mean())
-    y_coord = int(neutral_y.mean())
-    target = np.ravel_multi_index([y_coord, x_coord], obs.shape[:2])
+    target = [int(neutral_x.mean()), int(neutral_y.mean())]
+    target = np.ravel_multi_index(target, obs.shape[:2])
     return target
 
 

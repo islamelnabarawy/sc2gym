@@ -67,5 +67,5 @@ class MoveToBeaconEnv(SC2GameEnv):
         if action == 0:
             return [_NO_OP]
         screen_shape = self.observation_spec["screen"][1:]
-        target = list(np.unravel_index(action, screen_shape)[::-1])
+        target = list(np.unravel_index(action, screen_shape))
         return [_MOVE_SCREEN, _NOT_QUEUED, target]
