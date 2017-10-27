@@ -23,8 +23,9 @@ _NOT_QUEUED = [0]
 
 
 class MoveToBeaconEnv(SC2GameEnv):
-    def __init__(self, visualize=False):
-        super().__init__(map_name=_MAP_NAME, visualize=visualize)
+    def __init__(self, **kwargs):
+        super().__init__(map_name=_MAP_NAME, **kwargs)
+
         self._action_space = None
         self._observation_space = None
 

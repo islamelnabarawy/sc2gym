@@ -16,11 +16,9 @@ _NO_OP = actions.FUNCTIONS.no_op.id
 class SC2GameEnv(gym.Env):
     metadata = {'render.modes': [None, 'human']}
 
-    def __init__(self, map_name=None, step_mul=8, visualize=True) -> None:
+    def __init__(self, **kwargs) -> None:
         super().__init__()
-        self._map_name = map_name
-        self._visualize = visualize
-        self._step_mul = step_mul
+        self._kwargs = kwargs
         self._env = None
 
         self.episode = 0
@@ -57,37 +55,15 @@ class SC2GameEnv(gym.Env):
         self._env.save_replay(replay_dir)
 
     def _init_env(self):
-        self._env = sc2_env.SC2Env(
-            map_name=self._map_name,
-            step_mul=self._step_mul,
-            visualize=self._visualize
-        )
+        self._env = sc2_env.SC2Env(**self._kwargs)
 
     def _close(self):
         self._env.close()
         super()._close()
 
     @property
-    def visualize(self):
-        return self._visualize
-
-    @visualize.setter
-    def visualize(self, value):
-        if self._env is not None:
-            logger.warning("Setting visualize attribute after the game started has no effect.")
-        else:
-            self._visualize = value
-
-    @property
-    def map_name(self):
-        return self._map_name
-
-    @map_name.setter
-    def map_name(self, value):
-        if self._env is not None:
-            logger.warning("Setting map_name attribute after the game started has no effect.")
-        else:
-            self._map_name = value
+    def settings(self):
+        return self._kwargs
 
     @property
     def action_spec(self):
