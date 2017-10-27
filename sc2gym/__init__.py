@@ -16,10 +16,8 @@ register(
 
 register(
     id='SC2CollectMineralShards-v0',
-    entry_point='sc2gym.envs:SC2GameEnv',
-    kwargs={
-        'map_name': 'CollectMineralShards'
-    }
+    entry_point='sc2gym.envs:CollectMineralShardsEnv',
+    kwargs={}
 )
 
 register(
