@@ -26,7 +26,7 @@ Import gym and this package:
     import gym
     import sc2gym.envs
 
-Import and initialize absl.flags: (this is due to `pysc2`)
+Import and initialize absl.flags: (this is due to `pysc2` dependency)
 
     from absl import flags
     FLAGS = flags.FLAGS
@@ -39,7 +39,7 @@ next section.
 
 ### SC2Game:
 
-The full StarCraft II game environment. Specify the map as follows:
+The full StarCraft II game environment. Initialize as follows:
 
     env = gym.make('SC2Game-v0')
     env.settings['map_name'] = '<desired map name>'
@@ -51,13 +51,36 @@ observation space.
 #### Notes:
 - The action space for this environment doesn't require the call to
 `functionCall` like `pysc2` does. You just need to call it with an
-array of action and arguments. It will check the first element in the
-array (the action) and make sure it's available before trying to pass
-it along to the `pysc2` environment.
+array of action and arguments. For example:
+
+        _SELECT_ARMY = actions.FUNCTIONS.select_army.id
+        _SELECT_ALL = [0]
+        env.step([_SELECT_ARMY, _SELECT_ALL])
+
+    It will check the first element in the array (the action) and make
+    sure it's available before trying to pass it along to the
+    `pysc2` environment.
 - This environment doesn't specify the `observation_space` and
 `action_space` members like traditional `gym` environments. Instead,
 it provides access to the `observation_spec` and `action_spec` objects
 from the `pysc2` environment.
+
+### MoveToBeacon:
+
+The MoveToBeacon mini game. Initialize as follows:
+Initialize as follows:
+
+    env = gym.make('SC2CollectMineralShards-v0')
+
+Versions:
+- 'SC2MoveToBeacon-v0': The observation is a `[64, 64, 1]` numpy
+array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
+plane from the `pysc2` observation. The action is a number
+between 0 and 4095 (64x64).
+- 'SC2MoveToBeacon-v1': The observation is a `[64, 64, 1]` numpy
+array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
+plane from the `pysc2` observation. The action is an array of
+two number, each between 0 and 63.
 
 
 ### General Notes:
