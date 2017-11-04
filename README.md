@@ -1,24 +1,73 @@
-## PySC2 OpenAI Gym Environments
+# PySC2 OpenAI Gym Environments
 
 OpenAI Gym Environments for the StarCraft II PySC2 environment.
 
-This is still a work in progress.
+## Installation:
 
-### Notes:
-* The environment is currently defined the same way for all the mini games.
-* The action_space and observation_space member variables are not being set,
-instead there is an action_spec and observation_spec, which come directly
-from the pysc2 environment.
+After cloning the repository, you can use the environments in
+one of two ways:
+
+1. Add the directory where you cloned the repo to your `PYTHON_PATH`
+2. Install the package in development mode using pip: `pip install -e .`
+
+If you use the first option, you need to manually make sure the
+dependencies are installed.
+
+The second option will install the package into your `pip` environment
+as a link to the directory, so it will reflect the changes when
+you `git pull` or make any changes to the code.
+
+## Usage:
+
+You need the following minimum code to run any environment:
+
+Import gym and this package:
+
+    import gym
+    import sc2gym.envs
+
+Import and initialize absl.flags: (this is due to `pysc2`)
+
+    from absl import flags
+    FLAGS = flags.FLAGS
+    FLAGS(sys.argv)
+
+Create and initialize the specific environment as indicated in the
+next section.
+
+## Available environemnts:
+
+### SC2Game:
+
+The full StarCraft II game environment. Specify the map as follows:
+
+    env = gym.make('SC2Game-v0')
+    env.settings['map_name'] = '<desired map name>'
+
+Versions:
+- `SC2Game-v0`: The full game with complete access to action and
+observation space.
+
+#### Notes:
+- The action space for this environment doesn't require the call to
+`functionCall` like `pysc2` does. You just need to call it with an
+array of action and arguments. It will check the first element in the
+array (the action) and make sure it's available before trying to pass
+it along to the `pysc2` environment.
+- This environment doesn't specify the `observation_space` and
+`action_space` members like traditional `gym` environments. Instead,
+it provides access to the `observation_spec` and `action_spec` objects
+from the `pysc2` environment.
+
+
+### General Notes:
 * Per the Gym environment specifications, the reset function returns an
 observation, and the step function returns a tuple
 (observation, reward, done, info), where info is an empty dictionary and
-the observation is the full observation object from the pysc2 environment.
+the observation is the observation object from the pysc2 environment.
 The reward is the same as observation.reward, and done is equal true if
 observation.step_type is LAST.
-* In addition to step() and reset(), the environment defines a save_replay()
+* In addition to step() and reset(), the environments define a save_replay()
 method, that takes a single parameter, replay_dir, which is the name of the
 replay directory to save to inside the `StarCraft II/Replays/` folder.
-* The examples folder contains an example of using this environment.
-There are two functions defined in there, random_action() and move_to_beacon().
-The random_action() function was tested with each of the environment. The
-move_to_beacon() function has the scripted agent example from pysc2.
+* The examples folder contains examples of using the various environments.
