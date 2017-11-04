@@ -15,6 +15,12 @@ register(
 )
 
 register(
+    id='SC2MoveToBeacon-v1',
+    entry_point='sc2gym.envs:MoveToBeacon2dActionEnv',
+    kwargs={}
+)
+
+register(
     id='SC2CollectMineralShards-v0',
     entry_point='sc2gym.envs:CollectMineralShardsEnv',
     kwargs={}

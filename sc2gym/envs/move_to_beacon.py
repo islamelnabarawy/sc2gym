@@ -53,9 +53,12 @@ class MoveToBeaconEnv(SC2GameEnv):
     @property
     def action_space(self):
         if self._action_space is None:
-            screen_shape = self.observation_spec["screen"][1:]
-            self._action_space = spaces.Discrete(screen_shape[0]*screen_shape[1])
+            self._action_space = self._get_action_space()
         return self._action_space
+
+    def _get_action_space(self):
+        screen_shape = self.observation_spec["screen"][1:]
+        return spaces.Discrete(screen_shape[0] * screen_shape[1])
 
     @staticmethod
     def _extract_observation(obs):
@@ -69,3 +72,15 @@ class MoveToBeaconEnv(SC2GameEnv):
         screen_shape = self.observation_spec["screen"][1:]
         target = list(np.unravel_index(action, screen_shape))
         return [_MOVE_SCREEN, _NOT_QUEUED, target]
+
+
+class MoveToBeacon2dActionEnv(MoveToBeaconEnv):
+    def _get_action_space(self):
+        screen_shape = self.observation_spec["screen"][1:]
+        return spaces.MultiDiscrete([(0, s) for s in screen_shape])
+
+    def _translate_action(self, action):
+        for ix, act in enumerate(action):
+            if act < self.action_space.low[ix] or act >= self.action_space.high[ix]:
+                return [_NO_OP]
+        return [_MOVE_SCREEN, _NOT_QUEUED, action]

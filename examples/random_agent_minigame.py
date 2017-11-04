@@ -14,13 +14,14 @@ FLAGS = flags.FLAGS
 def main():
     FLAGS(sys.argv)
 
-    env = gym.make("SC2MoveToBeacon-v0")
+    env = gym.make("SC2MoveToBeacon-v1")
     obs = env.reset()
 
     total_reward = 0
     done = False
     while not done:
-        obs, reward, done, _ = env.step(env.action_space.sample())
+        action = env.action_space.sample()
+        obs, reward, done, _ = env.step(action)
         total_reward += reward
 
     print('Episode {} reward: {}'.format(env.episode, total_reward))
