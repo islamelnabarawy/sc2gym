@@ -69,17 +69,32 @@ from the `pysc2` environment.
 
 The MoveToBeacon mini game. Initialize as follows:
 
-    env = gym.make('SC2CollectMineralShards-v0')
+    env = gym.make('SC2MoveToBeacon-v0')
 
 Versions:
 - 'SC2MoveToBeacon-v0': The observation is a `[64, 64, 1]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is a number
-between 0 and 4095 (64x64).
+between 0 and 4095 (64x64). The environment pre-selects the marine at
+the start of each episode.
 - 'SC2MoveToBeacon-v1': The observation is a `[64, 64, 1]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is an array of
-two number, each between 0 and 63.
+two number, each between 0 and 63. The environment pre-selects the marine at
+the start of each episode.
+
+### CollectMineralShards:
+
+The CollectMineralShards mini game. Initialize as follows:
+
+    env = gym.make('SC2CollectMineralShards-v0')
+
+Versions:
+- 'SC2CollectMineralShards-v0': The observation is a `[64, 64, 1]` numpy
+array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
+plane from the `pysc2` observation. The action is a number
+between 0 and 4095 (64x64). The environment pre-selects both marines at
+the start of each episode.
 
 
 ### General Notes:
