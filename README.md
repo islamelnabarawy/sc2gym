@@ -68,7 +68,6 @@ from the `pysc2` environment.
 ### MoveToBeacon:
 
 The MoveToBeacon mini game. Initialize as follows:
-Initialize as follows:
 
     env = gym.make('SC2CollectMineralShards-v0')
 
