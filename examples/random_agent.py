@@ -28,7 +28,8 @@ _SELECT_ALL = [0]
 def main():
     FLAGS(sys.argv)
 
-    env = gym.make("SC2CollectMineralShards-v0")
+    env = gym.make("SC2Game-v0")
+    env.settings['map_name'] = 'CollectMineralShards'
     obs = env.reset()
 
     total_reward = 0
