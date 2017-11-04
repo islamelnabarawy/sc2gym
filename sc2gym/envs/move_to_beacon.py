@@ -64,7 +64,7 @@ class MoveToBeaconEnv(SC2GameEnv):
         return obs
 
     def _translate_action(self, action):
-        if action == 0:
+        if action < 0 or action >= self.action_space.n:
             return [_NO_OP]
         screen_shape = self.observation_spec["screen"][1:]
         target = list(np.unravel_index(action, screen_shape))
