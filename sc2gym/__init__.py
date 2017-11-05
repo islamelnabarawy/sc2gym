@@ -22,7 +22,13 @@ register(
 
 register(
     id='SC2CollectMineralShards-v0',
-    entry_point='sc2gym.envs:CollectMineralShardsEnv',
+    entry_point='sc2gym.envs:CollectMineralShards1dEnv',
+    kwargs={}
+)
+
+register(
+    id='SC2CollectMineralShards-v1',
+    entry_point='sc2gym.envs:CollectMineralShards2dEnv',
     kwargs={}
 )
 

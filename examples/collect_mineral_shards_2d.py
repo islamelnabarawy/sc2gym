@@ -21,7 +21,7 @@ _NUM_EPISODES = 10
 def main():
     FLAGS(sys.argv)
 
-    env = gym.make("SC2CollectMineralShards-v0")
+    env = gym.make("SC2CollectMineralShards-v1")
     env.settings['visualize'] = False
 
     episode_reward = np.zeros((_NUM_EPISODES, ))
@@ -47,7 +47,7 @@ def collect_mineral_shards(obs):
     player = [np.ceil(player_x.mean()).astype(int), np.ceil(player_y.mean()).astype(int)]
     shards = np.array(list(zip(neutral_x, neutral_y)))
     closest_ix = np.argmin(np.linalg.norm(np.array(player) - shards, axis=1))
-    target = np.ravel_multi_index(shards[closest_ix], obs.shape[:2])
+    target = shards[closest_ix]
     return target
 
 
