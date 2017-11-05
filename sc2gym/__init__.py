@@ -10,13 +10,13 @@ register(
 
 register(
     id='SC2MoveToBeacon-v0',
-    entry_point='sc2gym.envs:MoveToBeaconEnv',
+    entry_point='sc2gym.envs:MoveToBeacon1dEnv',
     kwargs={}
 )
 
 register(
     id='SC2MoveToBeacon-v1',
-    entry_point='sc2gym.envs:MoveToBeacon2dActionEnv',
+    entry_point='sc2gym.envs:MoveToBeacon2dEnv',
     kwargs={}
 )
 
