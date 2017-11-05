@@ -80,7 +80,7 @@ the start of each episode.
 - 'SC2MoveToBeacon-v1': The observation is a `[64, 64, 1]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is an array of
-two number, each between 0 and 63. The environment pre-selects the marine at
+two numbers, each between 0 and 63. The environment pre-selects the marine at
 the start of each episode.
 
 ### CollectMineralShards:
@@ -94,6 +94,11 @@ Versions:
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is a number
 between 0 and 4095 (64x64). The environment pre-selects both marines at
+the start of each episode.
+- 'SC2CollectMineralShards-v1': The observation is a `[64, 64, 1]` numpy
+array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
+plane from the `pysc2` observation. The action is an array of
+two numbers, each between 0 and 63. The environment pre-selects the marine at
 the start of each episode.
 
 
