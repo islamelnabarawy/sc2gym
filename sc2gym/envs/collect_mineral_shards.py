@@ -53,9 +53,12 @@ class CollectMineralShardsEnv(SC2GameEnv):
     @property
     def action_space(self):
         if self._action_space is None:
-            screen_shape = self.observation_spec["screen"][1:]
-            self._action_space = spaces.Discrete(screen_shape[0]*screen_shape[1])
+            self._action_space = self._get_action_space()
         return self._action_space
+
+    def _get_action_space(self):
+        screen_shape = self.observation_spec["screen"][1:]
+        return spaces.Discrete(screen_shape[0] * screen_shape[1])
 
     @staticmethod
     def _extract_observation(obs):
@@ -64,7 +67,7 @@ class CollectMineralShardsEnv(SC2GameEnv):
         return obs
 
     def _translate_action(self, action):
-        if action == 0:
+        if action < 0 or action >= self.action_space.n:
             return [_NO_OP]
         screen_shape = self.observation_spec["screen"][1:]
         target = list(np.unravel_index(action, screen_shape))
