@@ -2,3 +2,4 @@
 *.log
 *.json
 *.egg-info/
+.ipynb_checkpoints/
