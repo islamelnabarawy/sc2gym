@@ -1,6 +1,5 @@
 from gym import spaces
 from pysc2.lib import actions
-from sc2gym.envs import SC2GameEnv
 from sc2gym.envs.movement_minigame import BaseMovement1dEnv, BaseMovement2dEnv
 
 __author__ = 'Islam Elnabarawy'
@@ -59,7 +58,7 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
 
     def _get_action_space(self):
         screen_shape = self.observation_spec["screen"][1:]
-        return spaces.MultiDiscrete([(0, 3)] + [(0, s) for s in screen_shape])
+        return spaces.MultiDiscrete([(0, 2)] + [(0, s-1) for s in screen_shape])
 
     def _translate_action(self, action):
         for ix, act in enumerate(action):
