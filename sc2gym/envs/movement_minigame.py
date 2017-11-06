@@ -45,9 +45,13 @@ class BaseMovement1dEnv(SC2GameEnv):
     @property
     def observation_space(self):
         if self._observation_space is None:
-            screen_shape = self.observation_spec["screen"][1:] + (1, )
-            self._observation_space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape)
+            self._observation_space = self._get_observation_space()
         return self._observation_space
+
+    def _get_observation_space(self):
+        screen_shape = self.observation_spec["screen"][1:] + (1,)
+        space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape)
+        return space
 
     @property
     def action_space(self):
