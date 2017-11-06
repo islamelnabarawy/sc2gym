@@ -38,6 +38,11 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
         super().__init__(map_name=_MAP_NAME, step_mul=2, **kwargs)
 
     def _post_reset(self):
+        obs = self._init_control_groups()
+        obs = self._extract_observation(obs[0])
+        return obs
+
+    def _init_control_groups(self):
         obs = self._safe_step([_SELECT_ARMY, _SELECT_ALL])
         obs = self._safe_step([_CONTROL_GROUP, _GROUP_SET, [1]])
         obs = self._safe_step([_SELECT_UNIT, _SELECT_SINGLE, [0]])
@@ -45,8 +50,12 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
         obs = self._safe_step([_CONTROL_GROUP, _GROUP_RECALL, [1]])
         obs = self._safe_step([_SELECT_UNIT, _SELECT_SINGLE, [1]])
         obs = self._safe_step([_CONTROL_GROUP, _GROUP_SET, [3]])
-        obs = self._extract_observation(obs[0])
         return obs
+
+    def _step(self, action):
+        if _MOVE_SCREEN not in self.available_actions:
+            self._init_control_groups()
+        return super()._step(action)
 
     def _get_action_space(self):
         screen_shape = self.observation_spec["screen"][1:]
