@@ -33,6 +33,12 @@ register(
 )
 
 register(
+    id='SC2CollectMineralShards-v2',
+    entry_point='sc2gym.envs:CollectMineralShardsGroupsEnv',
+    kwargs={}
+)
+
+register(
     id='SC2FindAndDefeatZerglings-v0',
     entry_point='sc2gym.envs:SC2GameEnv',
     kwargs={

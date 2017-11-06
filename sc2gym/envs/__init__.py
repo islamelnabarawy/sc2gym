@@ -3,5 +3,6 @@ from sc2gym.envs.move_to_beacon import MoveToBeacon1dEnv
 from sc2gym.envs.move_to_beacon import MoveToBeacon2dEnv
 from sc2gym.envs.collect_mineral_shards import CollectMineralShards1dEnv
 from sc2gym.envs.collect_mineral_shards import CollectMineralShards2dEnv
+from sc2gym.envs.collect_mineral_shards import CollectMineralShardsGroupsEnv
 
 __author__ = 'Islam Elnabarawy'
