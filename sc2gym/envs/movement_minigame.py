@@ -30,13 +30,13 @@ class BaseMovement1dEnv(SC2GameEnv):
         return self._post_reset()
 
     def _post_reset(self):
-        obs, reward, done, info = super()._step([_SELECT_ARMY, _SELECT_ALL])
+        obs, reward, done, info = self._safe_step([_SELECT_ARMY, _SELECT_ALL])
         obs = self._extract_observation(obs)
         return obs
 
     def _step(self, action):
         action = self._translate_action(action)
-        obs, reward, done, info = super()._step(action)
+        obs, reward, done, info = self._safe_step(action)
         if obs is None:
             return None, 0, True, {}
         obs = self._extract_observation(obs)

@@ -25,6 +25,9 @@ class SC2GameEnv(gym.Env):
         self.num_step = 0
 
     def _step(self, action):
+        return self._safe_step(action)
+
+    def _safe_step(self, action):
         self.num_step += 1
         if action[0] not in self.available_actions:
             logger.warning("Attempted unavailable action: %s", action)

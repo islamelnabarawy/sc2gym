@@ -38,14 +38,13 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
         super().__init__(map_name=_MAP_NAME, step_mul=2, **kwargs)
 
     def _post_reset(self):
-        # HACK: figure out a better way to do this than manually calling the _step() method on the base class
-        SC2GameEnv._step(self, [_SELECT_ARMY, _SELECT_ALL])
-        SC2GameEnv._step(self, [_CONTROL_GROUP, _GROUP_SET, [1]])
-        SC2GameEnv._step(self, [_SELECT_UNIT, _SELECT_SINGLE, [0]])
-        SC2GameEnv._step(self, [_CONTROL_GROUP, _GROUP_SET, [2]])
-        SC2GameEnv._step(self, [_CONTROL_GROUP, _GROUP_RECALL, [1]])
-        SC2GameEnv._step(self, [_SELECT_UNIT, _SELECT_SINGLE, [1]])
-        obs = SC2GameEnv._step(self, [_CONTROL_GROUP, _GROUP_SET, [3]])
+        obs = self._safe_step([_SELECT_ARMY, _SELECT_ALL])
+        obs = self._safe_step([_CONTROL_GROUP, _GROUP_SET, [1]])
+        obs = self._safe_step([_SELECT_UNIT, _SELECT_SINGLE, [0]])
+        obs = self._safe_step([_CONTROL_GROUP, _GROUP_SET, [2]])
+        obs = self._safe_step([_CONTROL_GROUP, _GROUP_RECALL, [1]])
+        obs = self._safe_step([_SELECT_UNIT, _SELECT_SINGLE, [1]])
+        obs = self._safe_step([_CONTROL_GROUP, _GROUP_SET, [3]])
         obs = self._extract_observation(obs[0])
         return obs
 
@@ -57,6 +56,5 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
         for ix, act in enumerate(action):
             if act < self.action_space.low[ix] or act >= self.action_space.high[ix]:
                 return [_NO_OP]
-        # HACK: figure out a better way to do this than manually calling the _step() method on the base class
-        SC2GameEnv._step(self, [_CONTROL_GROUP, _GROUP_RECALL, [action[0] + 1]])
+        self._safe_step([_CONTROL_GROUP, _GROUP_RECALL, [action[0] + 1]])
         return [_MOVE_SCREEN, _NOT_QUEUED, action[1:]]
