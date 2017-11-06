@@ -30,13 +30,26 @@ def main():
 
         done = False
         while not done:
-            action = env.action_space.sample()
+            action = collect_mineral_shards(obs)
             obs, reward, done, _ = env.step(action)
             episode_reward[ix] += reward
 
         print('Episode {} reward: {}'.format(env.episode, episode_reward[ix]))
 
     print('Average reward for {} episodes: {}'.format(_NUM_EPISODES, np.mean(episode_reward)))
+
+
+def collect_mineral_shards(obs):
+    neutral_y, neutral_x, _ = (obs == _PLAYER_NEUTRAL).nonzero()
+    player_y, player_x, _ = (obs == _PLAYER_FRIENDLY).nonzero()
+    if not neutral_y.any() or not player_y.any():
+        print('No minerals found!')
+        return _NO_OP
+    player = [np.ceil(player_x.mean()).astype(int), np.ceil(player_y.mean()).astype(int)]
+    shards = np.array(list(zip(neutral_x, neutral_y)))
+    closest_ix = np.argmin(np.linalg.norm(np.array(player) - shards, axis=1))
+    target = shards[closest_ix]
+    return [0] + target.tolist()
 
 
 if __name__ == "__main__":
