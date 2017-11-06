@@ -1,10 +1,16 @@
+import numpy as np
 from gym import spaces
-from pysc2.lib import actions
+from pysc2.lib import actions, features
 from sc2gym.envs.movement_minigame import BaseMovement1dEnv, BaseMovement2dEnv
 
 __author__ = 'Islam Elnabarawy'
 
 _MAP_NAME = 'CollectMineralShards'
+
+_PLAYER_RELATIVE = features.SCREEN_FEATURES.player_relative.index
+_PLAYER_RELATIVE_SCALE = features.SCREEN_FEATURES.player_relative.scale
+
+_SELECTED = features.SCREEN_FEATURES.selected.index
 
 _SELECT_ARMY = actions.FUNCTIONS.select_army.id
 _SELECT_ALL = [0]
@@ -66,3 +72,16 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
                 return [_NO_OP]
         self._safe_step([_CONTROL_GROUP, _GROUP_RECALL, [action[0] + 1]])
         return [_MOVE_SCREEN, _NOT_QUEUED, action[1:]]
+
+    def _get_observation_space(self):
+        screen_shape = (2, ) + self.observation_spec["screen"][1:]
+        space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape)
+        return space
+
+    def _extract_observation(self, obs):
+        shape = (1, ) + self.observation_space.shape[1:]
+        obs = np.concatenate((
+            obs.observation["screen"][_PLAYER_RELATIVE].reshape(shape),
+            obs.observation['screen'][_SELECTED].reshape(shape)
+        ), axis=0)
+        return obs
