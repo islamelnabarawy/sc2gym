@@ -49,7 +49,7 @@ class BaseMovement1dEnv(SC2GameEnv):
         return self._observation_space
 
     def _get_observation_space(self):
-        screen_shape = self.observation_spec["screen"][1:] + (1,)
+        screen_shape = (1, ) + self.observation_spec["screen"][1:]
         space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape)
         return space
 
@@ -61,16 +61,15 @@ class BaseMovement1dEnv(SC2GameEnv):
 
     def _get_action_space(self):
         screen_shape = self.observation_spec["screen"][1:]
-        return spaces.Discrete(screen_shape[0] * screen_shape[1])
+        return spaces.Discrete(screen_shape[0] * screen_shape[1] - 1)
 
-    @staticmethod
-    def _extract_observation(obs):
+    def _extract_observation(self, obs):
         obs = obs.observation["screen"][_PLAYER_RELATIVE]
-        obs = obs.reshape(obs.shape + (1, ))
+        obs = obs.reshape(self.observation_space.shape)
         return obs
 
     def _translate_action(self, action):
-        if action < 0 or action >= self.action_space.n:
+        if action < 0 or action > self.action_space.n:
             return [_NO_OP]
         screen_shape = self.observation_spec["screen"][1:]
         target = list(np.unravel_index(action, screen_shape))
@@ -80,10 +79,10 @@ class BaseMovement1dEnv(SC2GameEnv):
 class BaseMovement2dEnv(BaseMovement1dEnv):
     def _get_action_space(self):
         screen_shape = self.observation_spec["screen"][1:]
-        return spaces.MultiDiscrete([(0, s) for s in screen_shape])
+        return spaces.MultiDiscrete([(0, s-1) for s in screen_shape])
 
     def _translate_action(self, action):
         for ix, act in enumerate(action):
-            if act < self.action_space.low[ix] or act >= self.action_space.high[ix]:
+            if act < self.action_space.low[ix] or act > self.action_space.high[ix]:
                 return [_NO_OP]
         return [_MOVE_SCREEN, _NOT_QUEUED, action]
