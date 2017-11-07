@@ -27,16 +27,18 @@ FLAGS([__file__])
 
 
 class BaseExample(object):
-    def __init__(self, env_name, visualize=False, step_mul=None) -> None:
+    def __init__(self, env_name, visualize=False, step_mul=None, random_seed=None) -> None:
         super().__init__()
         self.env_name = env_name
         self.visualize = visualize
         self.step_mul = step_mul
+        self.random_seed = random_seed
 
     def run(self, num_episodes=1):
         env = gym.make(self.env_name)
         env.settings['visualize'] = self.visualize
         env.settings['step_mul'] = self.step_mul
+        env.settings['random_seed'] = self.random_seed
 
         episode_rewards = np.zeros((num_episodes, ), dtype=np.int32)
         for ix in range(num_episodes):

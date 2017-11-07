@@ -30,8 +30,8 @@ _ENV_NAME = "SC2CollectMineralShards-v1"
 
 
 class CollectMineralShards2d(BaseExample):
-    def __init__(self, visualize=False, step_mul=None) -> None:
-        super().__init__(_ENV_NAME, visualize, step_mul)
+    def __init__(self, visualize=False, step_mul=None, random_seed=None) -> None:
+        super().__init__(_ENV_NAME, visualize, step_mul, random_seed)
 
     def get_action(self, env, obs):
         neutral_y, neutral_x = (obs[0] == _PLAYER_NEUTRAL).nonzero()
@@ -55,9 +55,11 @@ def main():
                         help='number of episodes to run')
     parser.add_argument('--step-mul', type=int, default=None,
                         help='number of game steps to take per turn')
+    parser.add_argument('--random-seed', type=int, default=None,
+                        help='the random seed to pass to the game environment')
     args = parser.parse_args()
 
-    example = CollectMineralShards2d(args.visualize, args.step_mul)
+    example = CollectMineralShards2d(args.visualize, args.step_mul, args.random_seed)
     rewards = example.run(args.num_episodes)
     print('Total reward: {}'.format(rewards.sum()))
     print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))

@@ -22,8 +22,8 @@ __description__ = 'Run an example doing random actions on a minigame environment
 
 
 class MinigameRandom(BaseExample):
-    def __init__(self, env_name, visualize=False, step_mul=None) -> None:
-        super().__init__(env_name, visualize, step_mul)
+    def __init__(self, env_name, visualize=False, step_mul=None, random_seed=None) -> None:
+        super().__init__(env_name, visualize, step_mul, random_seed)
 
     def get_action(self, env, obs):
         return env.action_space.sample()
@@ -39,9 +39,11 @@ def main():
                         help='number of episodes to run')
     parser.add_argument('--step-mul', type=int, default=None,
                         help='number of game steps to take per turn')
+    parser.add_argument('--random-seed', type=int, default=None,
+                        help='the random seed to pass to the game environment')
     args = parser.parse_args()
 
-    example = MinigameRandom(args.env_name, args.visualize, args.step_mul)
+    example = MinigameRandom(args.env_name, args.visualize, args.step_mul, args.random_seed)
     rewards = example.run(args.num_episodes)
     print('Total reward: {}'.format(rewards.sum()))
     print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))
