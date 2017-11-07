@@ -52,10 +52,7 @@ class SC2GameEnv(gym.Env):
         if self._env is None:
             self._init_env()
         if self.episode > 0:
-            logger.info("Episode %d ended with reward %d after %d steps.",
-                        self.episode, self.episode_reward, self.num_step)
-            logger.info("Got %d total reward so far, with an average reward of %g per episode",
-                        self.total_reward, float(self.total_reward) / self.episode)
+            self.report_reward()
         self.episode += 1
         self.num_step = 0
         self.episode_reward = 0
@@ -64,6 +61,12 @@ class SC2GameEnv(gym.Env):
         self.available_actions = obs.observation['available_actions']
         return obs
 
+    def report_reward(self):
+        logger.info("Episode %d ended with reward %d after %d steps.",
+                    self.episode, self.episode_reward, self.num_step)
+        logger.info("Got %d total reward so far, with an average reward of %g per episode",
+                    self.total_reward, float(self.total_reward) / self.episode)
+
     def save_replay(self, replay_dir):
         self._env.save_replay(replay_dir)
 
@@ -71,6 +74,8 @@ class SC2GameEnv(gym.Env):
         self._env = sc2_env.SC2Env(**self._kwargs)
 
     def _close(self):
+        if self.episode > 0:
+            self.report_reward()
         self._env.close()
         super()._close()
 
