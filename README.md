@@ -76,12 +76,14 @@ Versions:
 - 'SC2MoveToBeacon-v0': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is a number
-between 0 and 4095 (64x64). The environment pre-selects the marine at
-the start of each episode.
+between 0 and 4095 (64x64-1), which is a 1-d representation of the
+screen coordinates to move the marine towards. The environment
+pre-selects the marine at the start of each episode.
 - 'SC2MoveToBeacon-v1': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is an array of
-two numbers, each between 0 and 63. The environment pre-selects the marine at
+two numbers, each between 0 and 63, representing the screen coordinates
+to move the marine towards. The environment pre-selects the marine at
 the start of each episode.
 
 ### CollectMineralShards:
@@ -94,20 +96,24 @@ Versions:
 - 'SC2CollectMineralShards-v0': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is a number
-between 0 and 4095 (64x64). The environment pre-selects both marines at
-the start of each episode.
+between 0 and 4095 (64x64-1), which is a 1-d representation of the
+screen coordinates to move the marines towards. The environment
+pre-selects both marines at the start of each episode.
 - 'SC2CollectMineralShards-v1': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is an array of
-two numbers, each between 0 and 63. The environment pre-selects the marine at
+two numbers, each between 0 and 63, representing the screen coordinates
+to move the marines towards. The environment pre-selects the marine at
 the start of each episode.
 - 'SC2CollectMineralShards-v2': The observation is a `[2, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 and the `obs.observation['screen'][_SELECTED]` planes from the `pysc2`
 observation. The action is an array of three numbers. The first number
-represents which control group to move, and the remaining two numbers
-represent the screen coordinates to move to, each between 0 and 63.
-The environment automatically creates the following control groups.
+is between 0 and 2, representing which control group to move.
+The remaining two numbers are integers between 0 and 63, representing the screen coordinates
+to move the marines in this control group towards.
+The environment automatically creates the following control groups at
+the start of each episode.
 __Each episode starts with control group 3 pre-selected.__
     * Group 1 [index 0]: Both marines
     * Group 2 [index 1]: Marine 1
