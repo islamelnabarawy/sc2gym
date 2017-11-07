@@ -13,9 +13,10 @@ FLAGS = flags.FLAGS
 
 _PLAYER_FRIENDLY = 1
 _PLAYER_NEUTRAL = 3  # beacon/minerals
-_NO_OP = 0
 
 _NUM_EPISODES = 10
+
+_NEXT_GROUP = 0
 
 
 def main():
@@ -40,16 +41,23 @@ def main():
 
 
 def collect_mineral_shards(obs):
-    neutral_y, neutral_x, _ = (obs == _PLAYER_NEUTRAL).nonzero()
-    player_y, player_x, _ = (obs == _PLAYER_FRIENDLY).nonzero()
-    if not neutral_y.any() or not player_y.any():
-        print('No minerals found!')
-        return _NO_OP
-    player = [np.ceil(player_x.mean()).astype(int), np.ceil(player_y.mean()).astype(int)]
+    # HACK: Using global variable, to be replaced by defining a class instead of a function
+    global _NEXT_GROUP
+    neutral_y, neutral_x = (obs[0] == _PLAYER_NEUTRAL).nonzero()
+    marine_y, marine_x = ((obs[0] == _PLAYER_FRIENDLY) - obs[1]).nonzero()
+    if not neutral_y.any():
+        raise Exception('No minerals found!')
+    if not marine_y.any():
+        marine_y, marine_x, _ = obs[1].nonzero()
+    if not marine_y.any():
+        raise Exception('No marines found!')
+    marine = [np.ceil(marine_x.mean()).astype(int), np.ceil(marine_y.mean()).astype(int)]
     shards = np.array(list(zip(neutral_x, neutral_y)))
-    closest_ix = np.argmin(np.linalg.norm(np.array(player) - shards, axis=1))
-    target = shards[closest_ix]
-    return [0] + target.tolist()
+    closest_ix = np.argmin(np.linalg.norm(np.array(marine) - shards, axis=1))
+    target = shards[closest_ix].tolist()
+    group = [_NEXT_GROUP+1]
+    _NEXT_GROUP = (_NEXT_GROUP + 1) % 2
+    return group + target
 
 
 if __name__ == "__main__":
