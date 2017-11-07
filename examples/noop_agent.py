@@ -17,7 +17,10 @@ _NO_OP = [actions.FUNCTIONS.no_op.id]
 def main():
     FLAGS(sys.argv)
 
-    env = gym.make("SC2BuildMarines-v0")
+    env = gym.make("SC2Game-v0")
+    env.settings['map_name'] = 'BuildMarines'
+    env.settings['visualize'] = False
+
     obs = env.reset()
 
     done = False
