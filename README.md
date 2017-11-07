@@ -28,6 +28,7 @@ Import gym and this package:
 
 Import and initialize absl.flags: (this is due to `pysc2` dependency)
 
+    import sys
     from absl import flags
     FLAGS = flags.FLAGS
     FLAGS(sys.argv)
@@ -72,12 +73,12 @@ The MoveToBeacon mini game. Initialize as follows:
     env = gym.make('SC2MoveToBeacon-v0')
 
 Versions:
-- 'SC2MoveToBeacon-v0': The observation is a `[64, 64, 1]` numpy
+- 'SC2MoveToBeacon-v0': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is a number
 between 0 and 4095 (64x64). The environment pre-selects the marine at
 the start of each episode.
-- 'SC2MoveToBeacon-v1': The observation is a `[64, 64, 1]` numpy
+- 'SC2MoveToBeacon-v1': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is an array of
 two numbers, each between 0 and 63. The environment pre-selects the marine at
@@ -90,16 +91,27 @@ The CollectMineralShards mini game. Initialize as follows:
     env = gym.make('SC2CollectMineralShards-v0')
 
 Versions:
-- 'SC2CollectMineralShards-v0': The observation is a `[64, 64, 1]` numpy
+- 'SC2CollectMineralShards-v0': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is a number
 between 0 and 4095 (64x64). The environment pre-selects both marines at
 the start of each episode.
-- 'SC2CollectMineralShards-v1': The observation is a `[64, 64, 1]` numpy
+- 'SC2CollectMineralShards-v1': The observation is a `[1, 64, 64]` numpy
 array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
 plane from the `pysc2` observation. The action is an array of
 two numbers, each between 0 and 63. The environment pre-selects the marine at
 the start of each episode.
+- 'SC2CollectMineralShards-v2': The observation is a `[2, 64, 64]` numpy
+array that represents the `obs.observation['screen'][_PLAYER_RELATIVE]`
+and the `obs.observation['screen'][_SELECTED]` planes from the `pysc2`
+observation. The action is an array of three numbers. The first number
+represents which control group to move, and the remaining two numbers
+represent the screen coordinates to move to, each between 0 and 63.
+The environment automatically creates the following control groups.
+__Each episode starts with control group 3 pre-selected.__
+    * Group 1 [index 0]: Both marines
+    * Group 2 [index 1]: Marine 1
+    * Group 3 [index 2]: Marine 2
 
 
 ### General Notes:
