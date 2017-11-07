@@ -32,6 +32,8 @@ def main():
             action = collect_mineral_shards(obs)
             obs, reward, done, _ = env.step(action)
 
+    env.close()
+
 
 def collect_mineral_shards(obs):
     neutral_y, neutral_x = (obs[0] == _PLAYER_NEUTRAL).nonzero()

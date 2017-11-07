@@ -33,6 +33,8 @@ def main():
             action = collect_mineral_shards(obs)
             obs, reward, done, _ = env.step(action)
 
+    env.close()
+
 
 def collect_mineral_shards(obs):
     # HACK: Using global variable, to be replaced by defining a class instead of a function

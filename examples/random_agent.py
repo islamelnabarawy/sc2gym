@@ -37,6 +37,8 @@ def main():
         action = random_action(env, obs)
         obs, reward, done, _ = env.step(action)
 
+    env.close()
+
 
 def random_action(env, obs):
     function_id = np.random.choice(obs.observation["available_actions"])

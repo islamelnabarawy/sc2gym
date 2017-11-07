@@ -25,6 +25,8 @@ def main():
         action = _NO_OP
         obs, reward, done, _ = env.step(action)
 
+    env.close()
+
 
 if __name__ == "__main__":
     main()

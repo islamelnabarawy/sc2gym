@@ -22,6 +22,8 @@ def main():
         action = env.action_space.sample()
         obs, reward, done, _ = env.step(action)
 
+    env.close()
+
 
 if __name__ == "__main__":
     main()

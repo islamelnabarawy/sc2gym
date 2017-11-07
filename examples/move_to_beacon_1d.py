@@ -31,6 +31,8 @@ def main():
             action = move_to_beacon(obs)
             obs, reward, done, _ = env.step(action)
 
+    env.close()
+
 
 def move_to_beacon(obs):
     neutral_y, neutral_x, _ = (obs == _PLAYER_NEUTRAL).nonzero()
