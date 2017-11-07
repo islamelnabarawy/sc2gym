@@ -1,50 +1,44 @@
-import sys
-
 import numpy as np
-import gym
-from absl import flags
 
-# noinspection PyUnresolvedReferences
-import sc2gym.envs
+from examples.base_example import BaseExample
 
 __author__ = 'Islam Elnabarawy'
-
-FLAGS = flags.FLAGS
 
 _PLAYER_FRIENDLY = 1
 _PLAYER_NEUTRAL = 3  # beacon/minerals
 _NO_OP = 0
 
+_ENV_NAME = "SC2CollectMineralShards-v1"
+_VISUALIZE = False
+_STEP_MUL = None
 _NUM_EPISODES = 10
 
 
+class CollectMineralShards2d(BaseExample):
+    def __init__(self, visualize=False, step_mul=None) -> None:
+        super().__init__(_ENV_NAME, visualize, step_mul)
+
+    def get_action(self, env, obs):
+        neutral_y, neutral_x = (obs[0] == _PLAYER_NEUTRAL).nonzero()
+        player_y, player_x = (obs[0] == _PLAYER_FRIENDLY).nonzero()
+        if not neutral_y.any():
+            raise Exception('No minerals found!')
+        if not player_y.any():
+            raise Exception('No marines found!')
+        player = [np.ceil(player_x.mean()).astype(int), np.ceil(player_y.mean()).astype(int)]
+        shards = np.array(list(zip(neutral_x, neutral_y)))
+        closest_ix = np.argmin(np.linalg.norm(np.array(player) - shards, axis=1))
+        target = shards[closest_ix]
+        return target
+
+
 def main():
-    FLAGS(sys.argv)
-
-    env = gym.make("SC2CollectMineralShards-v1")
-    env.settings['visualize'] = False
-
-    for ix in range(_NUM_EPISODES):
-        obs = env.reset()
-
-        done = False
-        while not done:
-            action = collect_mineral_shards(obs)
-            obs, reward, done, _ = env.step(action)
-
-    env.close()
-
-
-def collect_mineral_shards(obs):
-    neutral_y, neutral_x = (obs[0] == _PLAYER_NEUTRAL).nonzero()
-    player_y, player_x = (obs[0] == _PLAYER_FRIENDLY).nonzero()
-    if not neutral_y.any() or not player_y.any():
-        return _NO_OP
-    player = [np.ceil(player_x.mean()).astype(int), np.ceil(player_y.mean()).astype(int)]
-    shards = np.array(list(zip(neutral_x, neutral_y)))
-    closest_ix = np.argmin(np.linalg.norm(np.array(player) - shards, axis=1))
-    target = shards[closest_ix]
-    return target
+    example = CollectMineralShards2d(_VISUALIZE, _STEP_MUL)
+    rewards = example.run(_NUM_EPISODES)
+    print('Total reward: {}'.format(rewards.sum()))
+    print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))
+    print('Minimum reward: {}'.format(rewards.min()))
+    print('Maximum reward: {}'.format(rewards.max()))
 
 
 if __name__ == "__main__":
