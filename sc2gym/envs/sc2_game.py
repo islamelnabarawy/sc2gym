@@ -54,8 +54,8 @@ class SC2GameEnv(gym.Env):
         if self.episode > 0:
             logger.info("Episode %d ended with reward %d after %d steps.",
                         self.episode, self.episode_reward, self.num_step)
-            logger.info("Got %d total reward so far, with an average reward of %d per episode",
-                        self.total_reward, self.total_reward / self.episode)
+            logger.info("Got %d total reward so far, with an average reward of %g per episode",
+                        self.total_reward, float(self.total_reward) / self.episode)
         self.episode += 1
         self.num_step = 0
         self.episode_reward = 0
