@@ -12,7 +12,6 @@ _NUM_EPISODES = 1
 class MinigameRandom(BaseExample):
     def __init__(self, visualize=False, step_mul=None) -> None:
         super().__init__(_ENV_NAME, visualize, step_mul)
-        self.next_group = 0
 
     def get_action(self, env, obs):
         return env.action_space.sample()
