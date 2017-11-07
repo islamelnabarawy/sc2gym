@@ -1,46 +1,38 @@
-import sys
-
 import numpy as np
-import gym
-from absl import flags
 
-# noinspection PyUnresolvedReferences
-import sc2gym.envs
+from examples.base_example import BaseExample
 
 __author__ = 'Islam Elnabarawy'
-
-FLAGS = flags.FLAGS
 
 _PLAYER_NEUTRAL = 3  # beacon/minerals
 _NO_OP = 0
 
+_ENV_NAME = "SC2MoveToBeacon-v0"
+_VISUALIZE = False
+_STEP_MUL = None
 _NUM_EPISODES = 10
 
 
+class MoveToBeacon1d(BaseExample):
+    def __init__(self, visualize=False, step_mul=None) -> None:
+        super().__init__(_ENV_NAME, visualize, step_mul)
+
+    def get_action(self, env, obs):
+        neutral_y, neutral_x = (obs[0] == _PLAYER_NEUTRAL).nonzero()
+        if not neutral_y.any():
+            raise Exception('Beacon not found!')
+        target = [int(neutral_x.mean()), int(neutral_y.mean())]
+        target = np.ravel_multi_index(target, obs.shape[1:])
+        return target
+
+
 def main():
-    FLAGS(sys.argv)
-
-    env = gym.make("SC2MoveToBeacon-v0")
-    env.settings['visualize'] = False
-
-    for ix in range(_NUM_EPISODES):
-        obs = env.reset()
-
-        done = False
-        while not done:
-            action = move_to_beacon(obs)
-            obs, reward, done, _ = env.step(action)
-
-    env.close()
-
-
-def move_to_beacon(obs):
-    neutral_y, neutral_x, _ = (obs == _PLAYER_NEUTRAL).nonzero()
-    if not neutral_y.any():
-        return _NO_OP
-    target = [int(neutral_x.mean()), int(neutral_y.mean())]
-    target = np.ravel_multi_index(target, obs.shape[:2])
-    return target
+    example = MoveToBeacon1d(_VISUALIZE, _STEP_MUL)
+    rewards = example.run(_NUM_EPISODES)
+    print('Total reward: {}'.format(rewards.sum()))
+    print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))
+    print('Minimum reward: {}'.format(rewards.min()))
+    print('Maximum reward: {}'.format(rewards.max()))
 
 
 if __name__ == "__main__":
