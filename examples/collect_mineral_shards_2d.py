@@ -40,8 +40,8 @@ def main():
 
 
 def collect_mineral_shards(obs):
-    neutral_y, neutral_x, _ = (obs == _PLAYER_NEUTRAL).nonzero()
-    player_y, player_x, _ = (obs == _PLAYER_FRIENDLY).nonzero()
+    neutral_y, neutral_x = (obs[0] == _PLAYER_NEUTRAL).nonzero()
+    player_y, player_x = (obs[0] == _PLAYER_FRIENDLY).nonzero()
     if not neutral_y.any() or not player_y.any():
         return _NO_OP
     player = [np.ceil(player_x.mean()).astype(int), np.ceil(player_y.mean()).astype(int)]
