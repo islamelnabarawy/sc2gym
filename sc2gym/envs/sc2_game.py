@@ -23,6 +23,8 @@ class SC2GameEnv(gym.Env):
 
         self.episode = 0
         self.num_step = 0
+        self.episode_reward = 0
+        self.total_reward = 0
 
     def _step(self, action):
         return self._safe_step(action)
@@ -42,13 +44,21 @@ class SC2GameEnv(gym.Env):
             return None, 0, True, {}
         self.available_actions = obs.observation['available_actions']
         reward = obs.reward
+        self.episode_reward += reward
+        self.total_reward += reward
         return obs, reward, obs.step_type == StepType.LAST, {}
 
     def _reset(self):
         if self._env is None:
             self._init_env()
+        if self.episode > 0:
+            logger.info("Episode %d ended with reward %d after %d steps.",
+                        self.episode, self.episode_reward, self.num_step)
+            logger.info("Got %d total reward so far, with an average reward of %d per episode",
+                        self.total_reward, self.total_reward / self.episode)
         self.episode += 1
         self.num_step = 0
+        self.episode_reward = 0
         logger.info("Episode %d starting...", self.episode)
         obs = self._env.reset()[0]
         self.available_actions = obs.observation['available_actions']

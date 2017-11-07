@@ -23,7 +23,6 @@ def main():
     env = gym.make("SC2MoveToBeacon-v1")
     env.settings['visualize'] = False
 
-    episode_reward = np.zeros((_NUM_EPISODES, ))
     for ix in range(_NUM_EPISODES):
         obs = env.reset()
 
@@ -31,11 +30,6 @@ def main():
         while not done:
             action = move_to_beacon(obs)
             obs, reward, done, _ = env.step(action)
-            episode_reward[ix] += reward
-
-        print('Episode {} reward: {}'.format(env.episode, episode_reward[ix]))
-
-    print('Average reward for {} episodes: {}'.format(_NUM_EPISODES, np.mean(episode_reward)))
 
 
 def move_to_beacon(obs):
