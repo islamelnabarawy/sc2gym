@@ -1,28 +1,30 @@
-import sys
-
-import gym
-from absl import flags
-
-# noinspection PyUnresolvedReferences
-import sc2gym.envs
+from examples.base_example import BaseExample
 
 __author__ = 'Islam Elnabarawy'
 
-FLAGS = flags.FLAGS
+
+_ENV_NAME = "SC2CollectMineralShards-v2"
+_VISUALIZE = False
+_STEP_MUL = None
+_NUM_EPISODES = 1
+
+
+class MinigameRandom(BaseExample):
+    def __init__(self, visualize=False, step_mul=None) -> None:
+        super().__init__(_ENV_NAME, visualize, step_mul)
+        self.next_group = 0
+
+    def get_action(self, env, obs):
+        return env.action_space.sample()
 
 
 def main():
-    FLAGS(sys.argv)
-
-    env = gym.make("SC2MoveToBeacon-v1")
-    obs = env.reset()
-
-    done = False
-    while not done:
-        action = env.action_space.sample()
-        obs, reward, done, _ = env.step(action)
-
-    env.close()
+    example = MinigameRandom(_VISUALIZE, _STEP_MUL)
+    rewards = example.run(_NUM_EPISODES)
+    print('Total reward: {}'.format(rewards.sum()))
+    print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))
+    print('Minimum reward: {}'.format(rewards.min()))
+    print('Maximum reward: {}'.format(rewards.max()))
 
 
 if __name__ == "__main__":
