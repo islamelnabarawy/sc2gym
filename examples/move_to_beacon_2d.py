@@ -13,18 +13,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 """
+import argparse
+
 from examples.base_example import BaseExample
 
 __author__ = 'Islam Elnabarawy'
-
+__description__ = 'Run a scripted example using the SC2MoveToBeacon-v1 environment.'
 
 _PLAYER_NEUTRAL = 3  # beacon/minerals
 _NO_OP = 0
 
 _ENV_NAME = "SC2MoveToBeacon-v1"
-_VISUALIZE = False
-_STEP_MUL = None
-_NUM_EPISODES = 10
 
 
 class MoveToBeacon2d(BaseExample):
@@ -40,8 +39,17 @@ class MoveToBeacon2d(BaseExample):
 
 
 def main():
-    example = MoveToBeacon2d(_VISUALIZE, _STEP_MUL)
-    rewards = example.run(_NUM_EPISODES)
+    parser = argparse.ArgumentParser(description=__description__)
+    parser.add_argument('--visualize', type=bool, default=False,
+                        help='show the pysc2 visualizer')
+    parser.add_argument('--num-episodes', type=int, default=10,
+                        help='number of episodes to run')
+    parser.add_argument('--step-mul', type=int, default=None,
+                        help='number of game steps to take per turn')
+    args = parser.parse_args()
+
+    example = MoveToBeacon2d(args.visualize, args.step_mul)
+    rewards = example.run(args.num_episodes)
     print('Total reward: {}'.format(rewards.sum()))
     print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))
     print('Minimum reward: {}'.format(rewards.min()))
