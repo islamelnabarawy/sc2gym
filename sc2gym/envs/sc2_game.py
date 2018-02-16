@@ -30,6 +30,10 @@ _NO_OP = actions.FUNCTIONS.no_op.id
 
 class SC2GameEnv(gym.Env):
     metadata = {'render.modes': [None, 'human']}
+    default_settings = {'agent_interface_format': sc2_env.parse_agent_interface_format(
+        feature_screen=84,
+        feature_minimap=64,
+    )}
 
     def __init__(self, **kwargs) -> None:
         super().__init__()
@@ -83,7 +87,9 @@ class SC2GameEnv(gym.Env):
         self._env.save_replay(replay_dir)
 
     def _init_env(self):
-        self._env = sc2_env.SC2Env(**self._kwargs)
+        args = {**self.default_settings, **self._kwargs}
+        logger.debug("Initializing SC2Env with settings: %s", args)
+        self._env = sc2_env.SC2Env(**args)
 
     def close(self):
         if self._episode > 0:

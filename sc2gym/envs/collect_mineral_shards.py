@@ -78,7 +78,7 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
         return super().step(action)
 
     def _get_action_space(self):
-        screen_shape = self.observation_spec["screen"][1:]
+        screen_shape = self.observation_spec[0]["feature_screen"][1:]
         return spaces.MultiDiscrete([2] + [s-1 for s in screen_shape])
 
     def _translate_action(self, action):
@@ -89,14 +89,14 @@ class CollectMineralShardsGroupsEnv(BaseMovement2dEnv):
         return [_MOVE_SCREEN, _NOT_QUEUED, action[1:]]
 
     def _get_observation_space(self):
-        screen_shape = (2, ) + self.observation_spec["screen"][1:]
+        screen_shape = (2, ) + self.observation_spec[0]["feature_screen"][1:]
         space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape)
         return space
 
     def _extract_observation(self, obs):
         shape = (1, ) + self.observation_space.shape[1:]
         obs = np.concatenate((
-            obs.observation["screen"][_PLAYER_RELATIVE].reshape(shape),
-            obs.observation['screen'][_SELECTED].reshape(shape)
+            obs.observation["feature_screen"][_PLAYER_RELATIVE].reshape(shape),
+            obs.observation['feature_screen'][_SELECTED].reshape(shape)
         ), axis=0)
         return obs
