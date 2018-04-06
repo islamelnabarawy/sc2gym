@@ -91,7 +91,8 @@ class SC2GameEnv(gym.Env):
                         self._episode, self._episode_reward, self._num_step)
             logger.info("Got %d total reward, with an average reward of %g per episode",
                         self._total_reward, float(self._total_reward) / self._episode)
-        self._env.close()
+        if self._env is not None:
+            self._env.close()
         super()._close()
 
     @property
