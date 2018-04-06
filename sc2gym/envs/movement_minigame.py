@@ -40,8 +40,8 @@ class BaseMovement1dEnv(SC2GameEnv):
         self._action_space = None
         self._observation_space = None
 
-    def _reset(self):
-        super()._reset()
+    def reset(self):
+        super().reset()
         return self._post_reset()
 
     def _post_reset(self):
@@ -49,7 +49,7 @@ class BaseMovement1dEnv(SC2GameEnv):
         obs = self._extract_observation(obs)
         return obs
 
-    def _step(self, action):
+    def step(self, action):
         action = self._translate_action(action)
         obs, reward, done, info = self._safe_step(action)
         if obs is None:
@@ -94,10 +94,10 @@ class BaseMovement1dEnv(SC2GameEnv):
 class BaseMovement2dEnv(BaseMovement1dEnv):
     def _get_action_space(self):
         screen_shape = self.observation_spec["screen"][1:]
-        return spaces.MultiDiscrete([(0, s-1) for s in screen_shape])
+        return spaces.MultiDiscrete([s-1 for s in screen_shape])
 
     def _translate_action(self, action):
         for ix, act in enumerate(action):
-            if act < self.action_space.low[ix] or act > self.action_space.high[ix]:
+            if act < 0 or act > self.action_space.nvec[ix]:
                 return [_NO_OP]
         return [_MOVE_SCREEN, _NOT_QUEUED, action]
