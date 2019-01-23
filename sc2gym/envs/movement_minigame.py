@@ -80,7 +80,7 @@ class BaseMovement1dEnv(SC2GameEnv):
 
     def _extract_observation(self, obs):
         obs = obs.observation["feature_screen"][_PLAYER_RELATIVE]
-        obs = obs.reshape(self.observation_space.shape)
+        obs = np.array(obs.reshape(self.observation_space.shape))
         return obs
 
     def _translate_action(self, action):
