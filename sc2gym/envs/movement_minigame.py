@@ -65,7 +65,7 @@ class BaseMovement1dEnv(SC2GameEnv):
 
     def _get_observation_space(self):
         screen_shape = (1, ) + self.observation_spec[0]["feature_screen"][1:]
-        space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape)
+        space = spaces.Box(low=0, high=_PLAYER_RELATIVE_SCALE, shape=screen_shape, dtype=np.int32)
         return space
 
     @property
