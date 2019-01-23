@@ -55,10 +55,11 @@ def main():
 
     example = MoveToBeacon1d(args.visualize, args.step_mul, args.random_seed)
     rewards = example.run(args.num_episodes)
-    print('Total reward: {}'.format(rewards.sum()))
-    print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))
-    print('Minimum reward: {}'.format(rewards.min()))
-    print('Maximum reward: {}'.format(rewards.max()))
+    if rewards:
+        print('Total reward: {}'.format(rewards.sum()))
+        print('Average reward: {} +/- {}'.format(rewards.mean(), rewards.std()))
+        print('Minimum reward: {}'.format(rewards.min()))
+        print('Maximum reward: {}'.format(rewards.max()))
 
 
 if __name__ == "__main__":

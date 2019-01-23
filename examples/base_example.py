@@ -41,6 +41,7 @@ class BaseExample(object):
         env.settings['random_seed'] = self.random_seed
 
         episode_rewards = np.zeros((num_episodes, ), dtype=np.int32)
+        episodes_done = 0
         for ix in range(num_episodes):
             obs = env.reset()
 
@@ -49,11 +50,16 @@ class BaseExample(object):
                 action = self.get_action(env, obs)
                 obs, reward, done, _ = env.step(action)
 
+            # stop if the environment was interrupted for any reason
+            if obs is None:
+                break
+
+            episodes_done += 1
             episode_rewards[ix] = env.episode_reward
 
         env.close()
 
-        return episode_rewards
+        return episode_rewards[:episodes_done]
 
     def get_action(self, env, obs):
         raise NotImplementedError('Inherited classes must override get_action() method')
